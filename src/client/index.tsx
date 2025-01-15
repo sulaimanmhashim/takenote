@@ -1,36 +1,31 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
+import { Router } from 'react-router-dom'
 import createSagaMiddleware from 'redux-saga'
-import { configureStore } from '@reduxjs/toolkit'
-import logger from 'redux-logger'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 
 import { App } from '@/containers/App'
 import rootSaga from '@/sagas'
 import rootReducer from '@/slices'
+import history from '@/utils/history'
 
 import '@/styles/index.scss'
 
-// Create Saga Middleware
 const sagaMiddleware = createSagaMiddleware()
-
-// Create Store with custom middleware configuration
 const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => 
-    getDefaultMiddleware().concat(sagaMiddleware, logger), // Add logger after sagaMiddleware
+  middleware: [sagaMiddleware, ...getDefaultMiddleware({ thunk: false })],
   devTools: process.env.NODE_ENV !== 'production',
 })
 
-// Run the saga
 sagaMiddleware.run(rootSaga)
 
-const root = ReactDOM.createRoot(document.getElementById('root')!)
-root.render(
+render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <App />
-    </BrowserRouter>
-  </Provider>
+    </Router>
+  </Provider>,
+  document.getElementById('root')
 )
