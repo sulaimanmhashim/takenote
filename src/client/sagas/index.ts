@@ -33,7 +33,11 @@ function* loginUser() {
       yield put(loginSuccess(data))
     }
   } catch (error) {
-    yield put(loginError(error.message))
+    if (error instanceof Error) {
+      yield put(loginError(error.message));
+    } else {
+      yield put(loginError("An unknown error occurred"));
+    }
   }
 }
 
@@ -53,7 +57,7 @@ function* logoutUser() {
 }
 
 // Get notes from API
-function* fetchNotes() {
+function* fetchNotes(): any {
   let data
   try {
     if (isDemo) {
@@ -65,12 +69,17 @@ function* fetchNotes() {
 
     yield put(loadNotesSuccess({ notes: data, sortOrderKey: notesSortKey }))
   } catch (error) {
-    yield put(loadNotesError(error.message))
+    if (error instanceof Error) {
+      yield put(loadNotesError(error.message))
+    }
+    else {
+      yield put(loginError("An unknown error occurred"));
+    }
   }
 }
 
 // Get categories from API
-function* fetchCategories() {
+function* fetchCategories():any {
   let data
   try {
     if (isDemo) {
@@ -81,12 +90,17 @@ function* fetchCategories() {
 
     yield put(loadCategoriesSuccess(data))
   } catch (error) {
-    yield put(loadCategoriesError(error.message))
+    if (error instanceof Error) {
+      yield put(loadCategoriesError(error.message))
+    }
+    else {
+      yield put(loginError("An unknown error occurred"));
+    }
   }
 }
 
 // Get settings from API
-function* fetchSettings() {
+function* fetchSettings():any {
   let data
   try {
     data = yield requestSettings()
@@ -106,16 +120,21 @@ function* syncData({ payload }: SyncAction) {
     }
     yield put(syncSuccess(dayjs().format()))
   } catch (error) {
-    yield put(syncError(error.message))
+    if (error instanceof Error) {
+      yield put(syncError(error.message))
+    }
+    else {
+      yield put(loginError("An unknown error occurred"));
+    }
   }
 }
 
-function* syncSettings() {
+function* syncSettings():any {
   try {
     const settings = yield select(getSettings)
 
     yield saveSettings(settings)
-  } catch (error) {}
+  } catch (error) { }
 }
 
 // If any of these functions are dispatched, invoke the appropriate saga
