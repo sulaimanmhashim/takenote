@@ -1,8 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Draggable } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Folder as FolderIcon, MoreHorizontal } from 'react-feather'
-
 import { TestID } from '@resources/TestID'
 import { CategoryItem, ReactDragEvent, ReactMouseEvent, ReactSubmitEvent } from '@/types'
 import { determineCategoryClass } from '@/utils/helpers'

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { v4 as uuid } from 'uuid'
-import { Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 import { LabelText } from '@resources/LabelText'
 import { TestID } from '@resources/TestID'
